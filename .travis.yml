@@ -24,4 +24,4 @@ script:
 - MRUBY_DIR="mruby-$MRUBY_TARGET"
 - wget -O- $MRUBY_URL | tar xzf -
 - cd $MRUBY_DIR
-- ./minirake -v test
+- ./minirake -v -j8 && ./minirake -v test
