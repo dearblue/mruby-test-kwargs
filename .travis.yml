@@ -1,0 +1,27 @@
+language: c
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - bison
+    - gcc-7
+    - g++-7
+
+include:
+  os:
+    linux
+
+env:
+- MRUBY_TARGET=get-keyword-args
+#- MRUBY_TARGET=master
+
+script:
+- export MRUBY_CONFIG="$TRAVIS_BUILD_DIR/.travis_config.rb"
+#- MRUBY_URL="https://github.com/mruby/mruby/archive/$MRUBY_TARGET.tar.gz"
+- MRUBY_URL="https://github.com/dearblue/mruby/archive/$MRUBY_TARGET.tar.gz"
+- MRUBY_DIR="mruby-$MRUBY_TARGET"
+- wget -O- $MRUBY_URL | tar xzf -
+- cd $MRUBY_DIR
+- ./minirake -v test
