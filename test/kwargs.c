@@ -72,10 +72,31 @@ c_getargs3(mrb_state *mrb, mrb_value self)
   return ret;
 }
 
+static mrb_value
+c_getargs4(mrb_state *mrb, mrb_value self)
+{
+  mrb_value a = mrb_undef_value();
+  mrb_value b = mrb_undef_value();
+  static const char *const knames[3] = { "x", "y", "z" };
+  mrb_value kvalues[3];
+  const mrb_kwargs kwargs = { 3, kvalues, knames, 0, NULL };
+  mrb_get_args(mrb, "|oo:", &a, &b, &kwargs);
+
+  mrb_value ret = mrb_ary_new_capa(mrb, 5);
+  mrb_ary_push(mrb, ret, mrb_undef_p(a) ? mrb_str_new_cstr(mrb, "a") : a);
+  mrb_ary_push(mrb, ret, mrb_undef_p(b) ? mrb_str_new_cstr(mrb, "b") : b);
+  mrb_ary_push(mrb, ret, mrb_undef_p(kvalues[0]) ? mrb_str_new_cstr(mrb, "x") : kvalues[0]);
+  mrb_ary_push(mrb, ret, mrb_undef_p(kvalues[1]) ? mrb_str_new_cstr(mrb, "y") : kvalues[1]);
+  mrb_ary_push(mrb, ret, mrb_undef_p(kvalues[2]) ? mrb_str_new_cstr(mrb, "z") : kvalues[2]);
+
+  return ret;
+}
+
 void
 mrb_mruby_test_kwargs_gem_test(mrb_state *mrb)
 {
   mrb_define_method(mrb, mrb->object_class, "c_getargs1", c_getargs1, MRB_ARGS_ANY());
   mrb_define_method(mrb, mrb->object_class, "c_getargs2", c_getargs2, MRB_ARGS_ANY());
   mrb_define_method(mrb, mrb->object_class, "c_getargs3", c_getargs3, MRB_ARGS_ANY());
+  mrb_define_method(mrb, mrb->object_class, "c_getargs4", c_getargs4, MRB_ARGS_ANY());
 }

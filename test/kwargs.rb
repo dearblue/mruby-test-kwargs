@@ -83,3 +83,25 @@ assert "mrb_get_args (getargs3)" do
   assert_args -> { mrb_getargs3(1, **opts) }, -> { c_getargs3(1, **opts) }
   assert_args -> { mrb_getargs3(1, 2, **opts) }, -> { c_getargs3(1, 2, **opts) }
 end
+
+def mrb_getargs4(a = "a", b = "b", x: "x", y: "y", z: "z")
+  [a, b, x, y, z]
+end
+
+assert "mrb_get_args (getargs4)" do
+  assert_args -> { mrb_getargs4 }, -> { c_getargs4 }
+  assert_args -> { mrb_getargs4(1) }, -> { c_getargs4(1) }
+  #assert_args -> { mrb_getargs4(1, 2, 3, 4) }, -> { c_getargs4(1, 2, 3, 4) }
+  assert_args -> { mrb_getargs4(*nil) }, -> { c_getargs4(*nil) }
+  assert_args -> { mrb_getargs4(**nil) }, -> { c_getargs4(**nil) }
+  assert_args -> { mrb_getargs4({}, x: "X") }, -> { c_getargs4({}, x: "X") }
+  assert_args -> { mrb_getargs4(**{}, x: "X") }, -> { c_getargs4(**{}, x: "X") }
+  #assert_args -> { mrb_getargs4(1, 2, 3, 4, x: "X") }, -> { c_getargs4(1, 2, 3, 4, x: "X") }
+  assert_args -> { mrb_getargs4(**{ a: 1, b: 2 }, x: "X") }, -> { c_getargs4(**{ a: 1, b: 2 }, x: "X") }
+
+  opts = { x: "x", y: "y", z: "z" }
+  assert_args -> { mrb_getargs4(1, opts) }, -> { c_getargs4(1, opts) }
+  assert_args -> { mrb_getargs4(1, 2, opts) }, -> { c_getargs4(1, 2, opts) }
+  assert_args -> { mrb_getargs4(1, **opts) }, -> { c_getargs4(1, **opts) }
+  assert_args -> { mrb_getargs4(1, 2, **opts) }, -> { c_getargs4(1, 2, **opts) }
+end
